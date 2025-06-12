@@ -26,6 +26,10 @@ const App = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const backgroundLocation = location.state?.background;
+  useEffect(() => {
+    dispatch(checkUserAuth());
+    dispatch(getIngredients());
+  }, [dispatch]);
   return (
     <div className={styles.app}>
       <AppHeader />

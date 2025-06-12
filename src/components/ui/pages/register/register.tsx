@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   Input,
   Button,
@@ -28,6 +28,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
 }) => {
   const [touched, setTouched] = useState<Touched>({});
   const [focused, setFocused] = useState<Focused>({});
+  const dispatch = useDispatch();
   const handleBlur = (field: keyof FormValues) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
     setFocused((prev) => ({ ...prev, [field]: false }));
@@ -44,6 +45,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
     touched,
     focused
   );
+  useEffect(() => () => void dispatch(clearError()), [dispatch]);
   return (
     <main className={styles.container}>
       <div className={`pt-6 ${styles.wrapCenter}`}>
