@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import {
   Input,
   Button,
@@ -26,7 +26,6 @@ export const RegisterUI: FC<RegisterUIProps> = ({
   userName,
   setUserName
 }) => {
-  const dispatch = useDispatch();
   const [touched, setTouched] = useState<Touched>({});
   const [focused, setFocused] = useState<Focused>({});
   const handleBlur = (field: keyof FormValues) => {
@@ -36,15 +35,15 @@ export const RegisterUI: FC<RegisterUIProps> = ({
   const handleFocus = (field: keyof FormValues) => {
     setFocused((prev) => ({ ...prev, [field]: true }));
   };
+  const values = useMemo(
+    () => ({ email, password, name: userName }),
+    [email, password, userName]
+  );
   const { errors, isValid, isFormValid } = useFormValidation(
-    { email, password, name: userName },
+    values,
     touched,
     focused
   );
-  useEffect(() => () => {
-    dispatch(clearError());
-  }),
-    [dispatch];
   return (
     <main className={styles.container}>
       <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -59,9 +58,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               <Input
                 type='text'
                 placeholder='Имя'
-                onChange={(e) => (
-                  setUserName(e.target.value), dispatch(clearError())
-                )}
+                onChange={(e) => setUserName(e.target.value)}
                 value={userName}
                 name='name'
                 error={touched.name ? !isValid.name : false}
@@ -75,9 +72,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               <Input
                 type='email'
                 placeholder='E-mail'
-                onChange={(e) => (
-                  setEmail(e.target.value), dispatch(clearError())
-                )}
+                onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 name={'email'}
                 error={touched.email ? !isValid.email : false}
@@ -92,9 +87,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               <Input
                 type='password'
                 placeholder='Пароль'
-                onChange={(e) => (
-                  setPassword(e.target.value), dispatch(clearError())
-                )}
+                onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 name={'password'}
                 error={touched.password ? !isValid.password : false}

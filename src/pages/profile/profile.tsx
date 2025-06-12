@@ -27,11 +27,7 @@ export const Profile: FC = () => {
       password: ''
     }));
   }, [user]);
-  useEffect(() => () => {
-    dispatch(clearError());
-  }),
-    [dispatch];
-
+  useEffect(() => () => void dispatch(clearError()), [dispatch]);
   const isFormChanged =
     formValue.name !== user?.name ||
     formValue.email !== user?.email ||
@@ -56,7 +52,6 @@ export const Profile: FC = () => {
       ...prevState,
       [e.target.name]: e.target.value
     }));
-    dispatch(clearError());
   };
 
   return (

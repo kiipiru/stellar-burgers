@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { Input, Button } from '@zlden/react-developer-burger-ui-components';
 import styles from '../common.module.css';
@@ -26,8 +26,9 @@ export const ForgotPasswordUI: FC<PageUIProps> = ({
   const handleFocus = (field: keyof FormValues) => {
     setFocused((prev) => ({ ...prev, [field]: true }));
   };
+  const values = useMemo(() => ({ email }), [email]);
   const { errors, isValid, isFormValid } = useFormValidation(
-    { email },
+    values,
     touched,
     focused
   );

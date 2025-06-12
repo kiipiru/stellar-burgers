@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import {
   Input,
   Button,
@@ -24,7 +24,6 @@ export const LoginUI: FC<LoginUIProps> = ({
   password,
   setPassword
 }) => {
-  const dispatch = useDispatch();
   const [touched, setTouched] = useState<Touched>({});
   const [focused, setFocused] = useState<Focused>({});
   const handleBlur = (field: keyof FormValues) => {
@@ -34,8 +33,9 @@ export const LoginUI: FC<LoginUIProps> = ({
   const handleFocus = (field: keyof FormValues) => {
     setFocused((prev) => ({ ...prev, [field]: true }));
   };
+  const values = useMemo(() => ({ email, password }), [email, password]);
   const { errors, isValid, isFormValid } = useFormValidation(
-    { email, password },
+    values,
     touched,
     focused
   );
@@ -53,9 +53,7 @@ export const LoginUI: FC<LoginUIProps> = ({
               <Input
                 type='email'
                 placeholder='E-mail'
-                onChange={(e) => (
-                  setEmail(e.target.value), dispatch(clearError())
-                )}
+                onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 name='email'
                 error={touched.email ? !isValid.email : false}
@@ -70,9 +68,7 @@ export const LoginUI: FC<LoginUIProps> = ({
               <Input
                 type='password'
                 placeholder='Пароль'
-                onChange={(e) => (
-                  setPassword(e.target.value), dispatch(clearError())
-                )}
+                onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 name={'password'}
                 error={touched.password ? !isValid.password : false}

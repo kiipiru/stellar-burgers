@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { Button, Input } from '@zlden/react-developer-burger-ui-components';
 import styles from './profile.module.css';
@@ -30,12 +30,16 @@ export const ProfileUI: FC<ProfileUIProps> = ({
   const handleFocus = (field: keyof FormValues) => {
     setFocused((prev) => ({ ...prev, [field]: true }));
   };
-  const { errors, isValid, isFormValid } = useFormValidation(
-    {
+  const values = useMemo(
+    () => ({
       email: formValue.email,
       password: formValue.password,
       name: formValue.name
-    },
+    }),
+    [formValue.email, formValue.password, formValue.name]
+  );
+  const { errors, isValid, isFormValid } = useFormValidation(
+    values,
     touched,
     focused,
     { passwordNotRequired: true }

@@ -1,7 +1,11 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
-import { getAuthError, registerUser } from '../../services/slices/authSlice';
+import {
+  clearError,
+  getAuthError,
+  registerUser
+} from '../../services/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const Register: FC = () => {
@@ -18,6 +22,7 @@ export const Register: FC = () => {
       if (registerUser.fulfilled.match(action)) navigate('/login');
     });
   };
+  useEffect(() => () => void dispatch(clearError()), [dispatch]);
 
   return (
     <RegisterUI

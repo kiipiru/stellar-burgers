@@ -20,10 +20,8 @@ export const Login: FC = () => {
       if (loginUser.fulfilled.match(action)) dispatch(getUser());
     });
   };
-  useEffect(() => () => {
-    dispatch(clearError());
-  }),
-    [dispatch];
+  useEffect(() => () => void dispatch(clearError()), [dispatch]);
+
   return (
     <LoginUI
       errorText={error}

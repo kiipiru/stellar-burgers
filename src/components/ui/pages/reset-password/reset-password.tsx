@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import {
   Input,
   Button,
@@ -31,8 +31,9 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
   const handleFocus = (field: keyof FormValues) => {
     setFocused((prev) => ({ ...prev, [field]: true }));
   };
+  const values = useMemo(() => ({ token, password }), [token, password]);
   const { errors, isValid, isFormValid } = useFormValidation(
-    { token, password },
+    values,
     touched,
     focused
   );
