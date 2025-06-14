@@ -13,8 +13,6 @@ import {
   FormValues,
   useFormValidation
 } from '../../../../utils/useFormValidation';
-import { useDispatch } from '../../../../services/store';
-import { clearError } from '../../../../services/slices/authSlice';
 
 export const LoginUI: FC<LoginUIProps> = ({
   email,

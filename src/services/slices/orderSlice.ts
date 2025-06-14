@@ -1,28 +1,21 @@
 import { getOrderByNumberApi, orderBurgerApi } from '@api';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  nanoid,
+  PayloadAction
+} from '@reduxjs/toolkit';
 import { TIngredient, TOrder } from '@utils-types';
 
-//TODO: починить селекторы и тд с заказом
-
-type TOrderFromServer = {
-  name: string | null;
-  order: {
-    number: number | null;
-  };
-};
+type TingredientWithKey = TIngredient & { id: string };
 
 type TOrderState = {
   bun: TIngredient | undefined;
-  ingredients: Array<TIngredient>;
+  ingredients: Array<TingredientWithKey>;
   price: number;
   loading: boolean;
   error: string | undefined;
-  data: {
-    name: string | null;
-    order: {
-      number: number | null;
-    };
-  };
+
   order: TOrder | null;
   isRequested: boolean;
 };
@@ -33,12 +26,6 @@ const initialState: TOrderState = {
   price: 0,
   loading: false,
   error: undefined,
-  data: {
-    name: null,
-    order: {
-      number: null
-    }
-  },
   order: null,
   isRequested: false
 };
@@ -57,15 +44,23 @@ const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    setIngredient: (state, action: PayloadAction<TIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = action.payload;
-      } else {
-        state.ingredients.push(action.payload);
+    setIngredient: {
+      reducer: (state, action: PayloadAction<TingredientWithKey>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload;
+        } else {
+          state.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => {
+        const id = nanoid();
+        return { payload: { ...ingredient, id } };
       }
     },
-    deleteIngredient: (state, action: PayloadAction<number>) => {
-      state.ingredients.splice(action.payload, 1);
+    deleteIngredient: (state, action: PayloadAction<string>) => {
+      state.ingredients = state.ingredients.filter(
+        (ingredient) => ingredient.id !== action.payload
+      );
     },
     moveDown: (state, action: PayloadAction<number>) => {
       const index = action.payload;
@@ -91,8 +86,7 @@ const orderSlice = createSlice({
     getIngredients: (state) => state.ingredients,
     getIngredientsIds: (state) =>
       state.ingredients.map((ingredient) => ingredient._id),
-    getPrice: (state) => state.price,
-    getData: (state) => state.data
+    getPrice: (state) => state.price
   },
   extraReducers: (builder) => {
     builder
@@ -106,7 +100,6 @@ const orderSlice = createSlice({
       })
       .addCase(submitOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
       })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
         state.order = action.payload.orders[0];
@@ -117,7 +110,7 @@ const orderSlice = createSlice({
   }
 });
 
-export const { getBun, getIngredients, getIngredientsIds, getPrice, getData } =
+export const { getBun, getIngredients, getIngredientsIds, getPrice } =
   orderSlice.selectors;
 export const {
   setIngredient,

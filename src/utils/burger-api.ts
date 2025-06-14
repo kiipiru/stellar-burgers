@@ -127,8 +127,9 @@ export const getOrderByNumberApi = (number: number) =>
   fetch(`${URL}/orders/${number}`, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+      authorization: getCookie('accessToken')
+    } as HeadersInit
   }).then((res) => checkResponse<TOrderResponse>(res));
 
 export type TRegisterData = {

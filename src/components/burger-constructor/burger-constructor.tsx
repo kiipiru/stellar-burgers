@@ -1,16 +1,15 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
   deleteRequest,
-  getData,
   getIngredientsIds,
   getOrderByNumber,
   submitOrder
 } from '../../services/slices/orderSlice';
 import { getUserInfo } from '../../services/slices/authSlice';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -22,7 +21,6 @@ export const BurgerConstructor: FC = () => {
     ingredients: ingredients as TConstructorIngredient[]
   };
   const ingredientIds = useSelector(getIngredientsIds);
-  const orderNumber = useSelector(getData).order.number;
   const orderRequest = useSelector((state) => state.order.isRequested);
 
   const orderModalData = useSelector((state) => state.order.order!);
@@ -35,8 +33,14 @@ export const BurgerConstructor: FC = () => {
     if (!constructorItems.bun || orderRequest) {
       return;
     }
-    dispatch(submitOrder([bunIng!._id, ...ingredientIds, bunIng!._id]));
-    dispatch(getOrderByNumber(orderNumber!));
+    dispatch(submitOrder([bunIng!._id, ...ingredientIds, bunIng!._id])).then(
+      (action) => {
+        if (submitOrder.fulfilled.match(action)) {
+          const orderNumber = action.payload.order.number;
+          dispatch(getOrderByNumber(orderNumber!));
+        }
+      }
+    );
   };
   const closeOrderModal = () => {
     dispatch(deleteRequest());
