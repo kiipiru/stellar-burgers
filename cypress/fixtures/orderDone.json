@@ -1,0 +1,20 @@
+{
+	"success": true,
+	"orders": [
+		{
+			"_id": "112233",
+			"ingredients": [
+				"643d69a5c3f7b9001cfa093c",
+				"643d69a5c3f7b9001cfa0943",
+				"643d69a5c3f7b9001cfa093c"
+			],
+			"owner": "да без разницы",
+			"status": "done",
+			"name": "Очень вкусный бургер",
+			"createdAt": "2077-06-27T12:58:46.296Z",
+			"updatedAt": "2077-06-27T12:58:47.090Z",
+			"number": 16546,
+			"__v": 0
+		}
+	]
+}
