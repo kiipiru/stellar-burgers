@@ -37,6 +37,7 @@ const allOrdersSlice = createSlice({
     builder
       .addCase(getAllOrders.pending, (state) => {
         state.loading = true;
+        state.error = undefined;
       })
       .addCase(getAllOrders.rejected, (state, action) => {
         state.loading = false;

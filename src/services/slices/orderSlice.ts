@@ -98,8 +98,16 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(submitOrder.fulfilled, (state, action) => {
+      .addCase(submitOrder.fulfilled, (state) => {
         state.loading = false;
+      })
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.loading = true;
+        state.error = undefined;
+      })
+      .addCase(getOrderByNumber.rejected, (state, action) => {
+        state.loading = true;
+        state.error = action.error.message;
       })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
         state.order = action.payload.orders[0];

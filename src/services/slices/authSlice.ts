@@ -96,18 +96,34 @@ const authorizatiionSlice = createSlice({
       .addCase(loginUser.rejected, (state) => {
         state.error = 'E-mail и/или пароль указаны неверно';
       })
-      .addCase(loginUser.fulfilled, (state) => {
-        state.isAuthorized = true;
+      .addCase(getUser.pending, (state) => {
+        state.error = undefined;
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.isAuthorized = true;
         state.userData = action.payload.user;
       })
+      .addCase(getUser.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(getUserOrders.pending, (state) => {
+        state.error = undefined;
+      })
       .addCase(getUserOrders.fulfilled, (state, action) => {
         state.userOrders = action.payload;
       })
+      .addCase(getUserOrders.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.error = undefined;
+      })
       .addCase(logoutUser.fulfilled, (state) => {
+        state.isAuthorized = false;
         state.userData = null;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.error = action.error.message;
       })
       .addCase(changeDataUser.pending, (state) => {
         state.error = undefined;
@@ -124,7 +140,6 @@ const authorizatiionSlice = createSlice({
 export const checkUserAuth = createAsyncThunk(
   'authorization/checkUser',
   (_, { dispatch }) => {
-    console.log('[checkUserAuth] accessToken:', getCookie('accessToken'));
     if (getCookie('accessToken')) {
       dispatch(getUser()).finally(() => {
         dispatch(authChecked());

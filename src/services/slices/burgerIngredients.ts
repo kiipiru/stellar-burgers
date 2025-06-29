@@ -28,6 +28,7 @@ const burgerIngredientsSlice = createSlice({
     builder
       .addCase(getIngredients.pending, (state) => {
         state.loading = true;
+        state.error = undefined;
       })
       .addCase(getIngredients.rejected, (state, action) => {
         state.loading = false;
