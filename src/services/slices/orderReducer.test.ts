@@ -186,7 +186,10 @@ describe('проверка редьюсера orderSlice', () => {
       test('статус pending', () => {
         const newState = orderReducer(
           initialIngredientsState,
-          getOrderByNumber.pending('pending', mockOrdersResponse.orders[0].number)
+          getOrderByNumber.pending(
+            'pending',
+            mockOrdersResponse.orders[0].number
+          )
         );
         const { loading, error } = newState;
         expect(loading).toBeTruthy;
@@ -201,11 +204,10 @@ describe('проверка редьюсера orderSlice', () => {
             mockOrdersResponse.orders[0].number
           )
         );
-        const { loading, bun, ingredients, isRequested} = newState;
+        const { loading, bun, ingredients, isRequested } = newState;
         expect(loading).toBeFalsy;
-        expect(bun).toBeUndefined,
-        expect(ingredients).toEqual([])
-        expect(isRequested).toBeTruthy
+        expect(bun).toBeUndefined, expect(ingredients).toEqual([]);
+        expect(isRequested).toBeTruthy;
       });
       test('возникновение ошибки', () => {
         const newState = orderReducer(
@@ -226,7 +228,10 @@ describe('проверка редьюсера orderSlice', () => {
       test('статус pending', () => {
         const newState = orderReducer(
           initialIngredientsState,
-          submitOrder.pending('pending', mockOrdersResponse.orders[0].ingredients)
+          submitOrder.pending(
+            'pending',
+            mockOrdersResponse.orders[0].ingredients
+          )
         );
         const { loading, error } = newState;
         expect(loading).toBeTruthy;
@@ -236,7 +241,11 @@ describe('проверка редьюсера orderSlice', () => {
         const newState = orderReducer(
           initialIngredientsState,
           submitOrder.fulfilled(
-            {order: mockOrdersResponse.orders[0], name: 'Заказик', success: true},
+            {
+              order: mockOrdersResponse.orders[0],
+              name: 'Заказик',
+              success: true
+            },
             'fulfilled',
             mockOrdersResponse.orders[0].ingredients
           )

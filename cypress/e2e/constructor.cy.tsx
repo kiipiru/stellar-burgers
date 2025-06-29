@@ -67,7 +67,7 @@ describe('тесты страницы constructor-page без авторизац
   describe('проверка создания заказа', () => {
     beforeEach(() => {
       cy.setCookie('accessToken', '123');
-      localStorage.setItem('refreshToken', '12345');
+      localStorage.setItem('refreshToken', '12345');  
       cy.intercept('GET', '**/api/auth/user', { fixture: 'user.json' }).as(
         'getUser'
       );

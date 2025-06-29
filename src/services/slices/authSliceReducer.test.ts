@@ -185,31 +185,39 @@ describe('проверка редьюсера authSlice', () => {
       });
     });
     describe('проверка функции changeDataUser', () => {
-        const errorText = 'Не удалось изменить информацию о пользователе';
-        test('статус pending', () => {
-          const newState = authorizationReducer(
-            initialAuthState,
-            changeDataUser.pending('pending', mockUser.user)
-          );
-          const { error } = newState;
-          expect(error).toBeUndefined;
-        });
-        test('статус fulfilled', () => {
-          const newState = authorizationReducer(
-            initialAuthState,
-            changeDataUser.fulfilled({ user: mockUser.user, success: true }, 'fulfilled', mockUser.user)
-          );
-          const { userData } = newState;
-          expect(userData).toEqual(mockUser.user);
-        });
-        test('возникновение ошибки', () => {
-          const newState = authorizationReducer(
-            initialAuthState,
-            changeDataUser.rejected(new Error(errorText), 'rejected', mockUser.user)
-          );
-          const { error } = newState;
-          expect(error).toBe(errorText);
-        });
+      const errorText = 'Не удалось изменить информацию о пользователе';
+      test('статус pending', () => {
+        const newState = authorizationReducer(
+          initialAuthState,
+          changeDataUser.pending('pending', mockUser.user)
+        );
+        const { error } = newState;
+        expect(error).toBeUndefined;
       });
+      test('статус fulfilled', () => {
+        const newState = authorizationReducer(
+          initialAuthState,
+          changeDataUser.fulfilled(
+            { user: mockUser.user, success: true },
+            'fulfilled',
+            mockUser.user
+          )
+        );
+        const { userData } = newState;
+        expect(userData).toEqual(mockUser.user);
+      });
+      test('возникновение ошибки', () => {
+        const newState = authorizationReducer(
+          initialAuthState,
+          changeDataUser.rejected(
+            new Error(errorText),
+            'rejected',
+            mockUser.user
+          )
+        );
+        const { error } = newState;
+        expect(error).toBe(errorText);
+      });
+    });
   });
 });
